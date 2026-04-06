@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Yadhara, Mi Vida - Feliz Cumpleaños</title>
+  <style>
+    /* Importando fuentes premium */
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Great+Vibes&family=IM+Fell+English+SC&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: #010103; font-family: 'Lora', serif; color: white; }
+    
+    #canvas-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+    
+    /* Interfaz Inicial de Lujo */
+    #ui-container { 
+      position: absolute; z-index: 100; top: 0; left: 0; width: 100vw; height: 100vh; 
+      display: flex; flex-direction: column; justify-content: center; align-items: center; 
+      background: radial-gradient(circle, rgba(26,11,46,1) 0%, rgba(1,1,3,1) 100%); 
+      transition: opacity 1.5s ease-out; 
+    }
+    
+    #ui-container h1 { 
+      font-family: 'Great Vibes', cursive; font-size: 5rem; color: #ffb3d9; 
+      margin-bottom: 2rem; text-shadow: 0 0 20px rgba(255, 179, 217, 0.7); text-align: center;
+      padding: 0 20px;
+    }
+    
+    #ui-container h2 { 
+      font-family: 'Cinzel Decorative', cursive; font-size: 1.5rem; color: #ffd700; 
+      margin-top: -1.5rem; margin-bottom: 3rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); 
+    }
+    
+    button { 
+      padding: 18px 50px; font-size: 1.3rem; font-family: 'IM Fell English SC', serif; 
+      background: transparent; color: #ffd700; border: 2px solid #ffd700; 
+      border-radius: 5px; cursor: pointer; transition: all 0.4s ease; 
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); letter-spacing: 2px;
+    }
+    button:hover { 
+      background: rgba(255, 215, 0, 0.1); transform: scale(1.05); 
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); border-color: #fff; color: #fff;
+    }
+    
+    #instruction { 
+      position: absolute; bottom: 8%; z-index: 5; font-size: 1.3rem; text-align: center; 
+      width: 100%; pointer-events: none; opacity: 0; transition: opacity 1s ease 1s; 
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8); font-style: italic; color: #ffb3d9; font-weight: bold;
+    }
+
+    /* Carta con el Mensaje - Textura Pergamino */
+    #letter-overlay { 
+      position: absolute; z-index: 200; top: 0; left: 0; width: 100vw; height: 100vh; 
+      background: rgba(0,0,0,0.75); display: flex; justify-content: center; align-items: center; 
+      opacity: 0; pointer-events: none; transition: opacity 2s ease; 
+      backdrop-filter: blur(8px); padding: 20px;
+    }
+    
+    #paper { 
+      width: 100%; max-width: 700px; max-height: 85vh; 
+      /* Textura de pergamino de alta calidad */
+      background-color: #f3e5ab;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="400" height="400" fill="%23f3e5ab" filter="url(%23n)" opacity="0.1"/></svg>');
+      padding: 50px 40px; border-radius: 5px; 
+      box-shadow: 0 15px 50px rgba(0,0,0,0.8), inset 0 0 50px rgba(139,69,19,0.2); 
+      overflow-y: auto; color: #3d2b1f; line-height: 1.9; font-size: 1.15rem; 
+      border: 15px solid transparent;
+      border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50"><path d="M0,0 L50,0 L50,50 L0,50 Z" fill="none" stroke="%238b4513" stroke-width="2" opacity="0.3"/></svg>') 15 stretch;
+    }
+    
+    #paper::-webkit-scrollbar { width: 10px; }
+    #paper::-webkit-scrollbar-thumb { background: #8b4513; border-radius: 5px; }
+    
+    .letter-title { 
+      font-family: 'Great Vibes', cursive; font-size: 3rem; color: #8b0000; 
+      text-align: center; margin-bottom: 30px; line-height: 1.2; 
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    .letter-title span { color: #cc2936; } /* Color especial para Yadhara */
+    .letter-content p { margin-bottom: 20px; text-align: justify; }
+    .letter-content em { color: #8b0000; font-weight: 600; }
+    .signature { 
+      text-align: right; font-family: 'Great Vibes', cursive; 
+      font-size: 2.5rem; color: #8b0000; margin-top: 40px; padding-right: 20px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <audio id="bg-music" src="musica.mp3" loop></audio>
+
+  <div id="ui-container">
+    <h1>Feliz Cumpleaños</h1>
+    <h2>Yadhara, Mi Vida</h2>
+    <button id="start-btn">ENTRAR A TU SORPRESA</button>
+  </div>
+
+  <div id="instruction">✨ Gira el espacio, toca el sello de cera para abrir tu carta ✨</div>
+
+  <div id="canvas-container"></div>
+
+  <div id="letter-overlay">
+    <div id="paper">
+      <div class="letter-title">Para la mujer más increíble,<br><span>Yadhara</span>. <br>Felices 19 añitos 🥰</div>
+      <div class="letter-content">
+        <p>Hoy es 20 de abril, un día inmensamente especial. Tal vez hoy la distancia o las circunstancias no nos permitan estar todo lo cerca que quisiéramos, pero no te escribo por compromiso, sino porque mi corazón simplemente necesitaba desbordarse y recordarte cuánto te amo y más en tu cumpleaños.</p>
+        
+        <p>A veces siento que las palabras se me quedan cortas, pero tengo unas ganas inmensas de amarte cada día más. Desde que llegaste a mi vida hace 6 meses, todo cambió de una forma real y profunda. Sé muy bien que no ha sido un camino fácil, hemos tenido que enfrentar tantas cosas: la distancia, los problemas, el hecho de que tu familia no esté de acuerdo con que tengas enamorado y más... y sé que puede haber mil razones o excusas para no estar juntos, pero ya me cansé de todas ellas, hoy solo busco y elijo las razones para quedarme contigo.</p>
+        
+        <p>Conozco tu forma de ser. Sé que a veces puedes parecer un poquito fría o que te cuesta demostrar afecto, pero quiero que sepas que te amo exactamente así tal y como eres. No necesito que cambies, porque en tus pequeños detalles, en tu esfuerzo diario por darme lo que puedes y en cómo me entiendes sin que yo diga una palabra, veo el amor más sincero.</p>
+
+        <p>Sabes leer mis silencios y abrazar mis días difíciles, y me das la confianza de ser yo mismo, sin que tenga que aparentar. En estos 6 meses a tu lado he mejorado muchísimo como persona, contigo aprendí que la risa es más bonita cuando nace al lado de quien quieres, y que amar no es solo decir "te amo", sino demostrarlo, construirlo, defenderlo a pesar de todo y elegirlo cada día.</p>
+
+        <p>Cuando miro esa foto de tus ojos, me invade una paz inmensa y me confirma que siempre estuvimos destinados a encontrarnos. Quiero que sepas que te admiro, mi niña. Admiro tu manera de ver la vida, tu fuerza para levantarte cuando algo te derriba y ese corazón tan noble que tienes. Me siento el hombre más afortunado del mundo porque me escogiste para acompañarte; gracias por tu paciencia, por tu comprensión y por hacerme sentir amado de una forma tan tuya y tan única.</p>
+
+        <p>Mi amor, yo quiero una vida entera contigo, quiero que sigamos caminando, soñando y creciendo de la mano. Anhelo más amaneceres juntos, más llamadas eternas, abrazos que lo curen todo y risas que nos hagan doler el estómago. Quiero que construyamos un futuro, con muchos recuerdos donde miremos atrás y digamos <em>"¿Te acuerdas cuando pasamos por todo eso y lo superamos, te acuerdas de esto y el otro?"</em>.</p>
+
+        <p>Y disculpa si a veces insisto, intento comprender por todo lo que pasas, apoyarte en cada momento, pero a veces la distancia no me permite cuidarte como quisiera. Sé que podrás con todo mi vida, aun con miles de problemas sé que podrás. Sé que vendrán más problemas para ti, para mí, para nosotros, pero seguiremos adelante siendo nosotros mismos.</p>
+        
+        <p>No quiero que te esfuerces tanto, te esperaré, te daré tu tiempo, pero siempre sé tú misma. Yo te amaré en todas tus fases. Para mí eres Goku, me encantan todas tus fases jsjsjsj. Cuando llores, cuando estés molesta, cuando todo... Estaré ahí, no lo dudes.</p>
+
+        <p>Te deseo un feliz cumpleaños, pásala bonito hoy, aprovecha, valora cada momento con cada persona porque son únicos. Te amo muchisimoooo, y no es un amor que se dice por costumbre, sino uno que siento en cada parte de mí; un amor tranquilo pero inquebrantable, tierno pero firme, esos que se quedan porque son reales y únicos.</p>
+
+        <p>Gracias por existir mi vida, gracias por ser tú. Agradezco a Dios por haberte traído en mi vida esa vez que pensábamos que iríamos a otra sede en el bus jsjsj. Sigamos avanzando juntos. 💋</p>
+      </div>
+      <div class="signature">Con todo mi amor,<br>Tu enamorado ❤️</div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://esm.sh/three@0.160.0",
+        "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/",
+        "troika-three-text": "https://esm.sh/troika-three-text@0.49.0?external=three"
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { Text } from 'troika-three-text';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+    // 1. Setup Escena y Renderizado Profesional
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    
+    // Fondo de cosmos profundo
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 2, 10);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enablePan = false;
+    controls.minDistance = 5;
+    controls.maxDistance = 25;
+    controls.autoRotate = true; // Rotación automática suave inicial
+    controls.autoRotateSpeed = 0.5;
+
+    // 2. Iluminación Cinematográfica y Post-Procesamiento (Bloom)
+    scene.add(new THREE.AmbientLight(0xffb3d9, 0.3)); // Luz ambiental rosada muy tenue
+
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    mainLight.position.set(5, 10, 7);
+    scene.add(mainLight);
+
+    const backLight = new THREE.PointLight(0xffb3d9, 1, 20); // Luz de contra suave rosada
+    backLight.position.set(-5, -2, -5);
+    scene.add(backLight);
+
+    // Post-procesamiento para el brillo (Bloom)
+    const renderScene = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85);
+    const composer = new EffectComposer(renderer);
+    composer.addPass(renderScene);
+    composer.addPass(bloomPass);
+
+    // 3. ENTORNO MEJORADO: Cosmos Romántico
+    
+    // Estrellas dinámicas
+    const starsCount = 5000;
+    const starsPos = new Float32Array(starsCount * 3);
+    const starsSizes = new Float32Array(starsCount);
+    for(let i=0; i < starsCount; i++) {
+      starsPos[i*3] = (Math.random() - 0.5) * 150;
+      starsPos[i*3+1] = (Math.random() - 0.5) * 150;
+      starsPos[i*3+2] = (Math.random() - 0.5) * 150;
+      starsSizes[i] = Math.random() * 0.15;
+    }
+    const starsGeo = new THREE.BufferGeometry();
+    starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+    const starsMat = new THREE.PointsMaterial({
+      size: 0.1,
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
+    });
+    const starsMesh = new THREE.Points(starsGeo, starsMat);
+    scene.add(starsMesh);
+
+    // Nebulosa Galáctica de fondo (usando partículas grandes con textura sutil)
+    function createNebula() {
+      const group = new THREE.Group();
+      const nebulaCount = 20;
+      const colors = [0xff1493, 0x800080, 0x0000ff]; // Rosa, Morado, Azul
+
+      for(let i=0; i<nebulaCount; i++){
+        const geo = new THREE.PlaneGeometry(30, 30);
+        // Textura base64 de una nube procedural sutil
+        const mat = new THREE.MeshBasicMaterial({
+          color: colors[i % colors.length],
+          transparent: true,
+          opacity: 0.03 + Math.random() * 0.04,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          side: THREE.DoubleSide
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set((Math.random()-0.5)*80, (Math.random()-0.5)*80, -50 + (Math.random()-0.5)*20);
+        mesh.rotation.z = Math.random() * Math.PI;
+        group.add(mesh);
+      }
+      return group;
+    }
+    const nebulaGroup = createNebula();
+    scene.add(nebulaGroup);
+
+    // 4. EL SOBRE Y LA CARTA PROFESIONALES (3D)
+    const envelopeGroup = new THREE.Group();
+    scene.add(envelopeGroup);
+
+    // Texturas de Papel Procedurales sutiles (Canvas textures)
+    function createPaperTexture(color1, color2) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512; canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = color1;
+      ctx.fillRect(0, 0, 512, 512);
+      ctx.fillStyle = color2;
+      for(let i=0; i<1000; i++){
+        ctx.globalAlpha = Math.random() * 0.05;
+        ctx.beginPath();
+        ctx.arc(Math.random()*512, Math.random()*512, Math.random()*2, 0, Math.PI*2);
+        ctx.fill();
+      }
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    const envTex = createPaperTexture('#e0aebf', '#c090a0'); // Papel Rosado Vintage
+    const letterTex = createPaperTexture('#fffaf0', '#e8d8c8'); // Papel Crema
+
+    const bodyMat = new THREE.MeshStandardMaterial({ map: envTex, roughness: 0.8, metalness: 0.1 });
+    const letterMat = new THREE.MeshStandardMaterial({ map: letterTex, roughness: 0.9 });
+    
+    // Cuerpo principal del sobre (Ligeramente curvado para realismo)
+    const bodyGeo = new THREE.BoxGeometry(6, 4, 0.15);
+    const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+    envelopeGroup.add(bodyMesh);
+
+    // Bordes Dorados del Sobre
+    const frameGeo = new THREE.BoxGeometry(6.1, 4.1, 0.05);
+    const frameMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.2, emissive: 0xffd700, emissiveIntensity: 0.2 });
+    const frameMesh = new THREE.Mesh(frameGeo, frameMat);
+    frameMesh.position.set(0, 0, 0.04);
+    envelopeGroup.add(frameMesh);
+
+    // Detalle: Texto en el Sobre 3D (Troika Text)
+    const envelopeText = new Text();
+    envelopeText.text = "Para: Yadhara\nMi Vida";
+    envelopeText.font = 'https://fonts.gstatic.com/s/greatvibes/v15/RWmTo3XV1RAtqFTM6N93Y53G.ttf'; // Carga Great Vibes
+    envelopeText.fontSize = 0.5;
+    envelopeText.color = 0xffd700;
+    envelopeText.anchorX = 'left';
+    envelopeText.position.set(-2.5, 0.5, 0.08);
+    envelopeText.curveRadius = -10; // Ligera curva
+    envelopeText.sync();
+    envelopeGroup.add(envelopeText);
+
+    // SOLAPA DEL SOBRE (Triángulo con textura)
+    const flapPivot = new THREE.Group();
+    flapPivot.position.set(0, 2, 0.08); // Borde superior del cuerpo
+    envelopeGroup.add(flapPivot);
+
+    const flapShape = new THREE.Shape();
+    flapShape.moveTo(-3, 0);
+    flapShape.lineTo(3, 0);
+    flapShape.lineTo(0, -2.5); // Punta hacia abajo
+    flapShape.lineTo(-3, 0);
+    
+    const flapGeo = new THREE.ShapeGeometry(flapShape);
+    const flapMat = new THREE.MeshStandardMaterial({ map: envTex, roughness: 0.8, side: THREE.DoubleSide });
+    const flapMesh = new THREE.Mesh(flapGeo, flapMat);
+    // Ajustar posición relativa al pivot (rotar desde la base superior)
+    flapMesh.position.set(0, 0, 0);
+    flapPivot.add(flapMesh);
+
+    // Sello de Cera Rojo modelado (Cilindro + Toroide)
+    const waxSealGroup = new THREE.Group();
+    waxSealGroup.position.set(0, -1.8, 0.02); // Justo en la punta de la solapa
+    flapPivot.add(waxSealGroup);
+
+    const waxMat = new THREE.MeshStandardMaterial({ color: 0x8b0000, roughness: 0.4, metalness: 0.2, emissive: 0x500000 });
+    
+    const waxBaseGeo = new THREE.CylinderGeometry(0.5, 0.53, 0.1, 32);
+    const waxBase = new THREE.Mesh(waxBaseGeo, waxMat);
+    waxBase.rotation.x = Math.PI / 2;
+    waxSealGroup.add(waxBase);
+
+    const waxRingGeo = new THREE.TorusGeometry(0.45, 0.06, 16, 32);
+    const waxRing = new THREE.Mesh(waxRingGeo, waxMat);
+    waxRing.position.set(0,0,0.05);
+    waxSealGroup.add(waxRing);
+
+    // Inicial 'Y' dorada en el sello
+    const sealText = new Text();
+    sealText.text = "Y";
+    sealText.font = 'https://fonts.gstatic.com/s/cinzeldecorative/v16/En4QJxX45e2IIn0C8U24dAx5.ttf'; // Cinzel Decorative
+    sealText.fontSize = 0.5;
+    sealText.color = 0xffd700;
+    sealText.position.set(0, 0, 0.1);
+    sealText.anchorX = 'center';
+    sealText.anchorY = 'middle';
+    sealText.sync();
+    waxSealGroup.add(sealText);
+
+    // LA CARTA INTERNA (Mejorada con textura de papel artesanal)
+    const letterGeo = new THREE.PlaneGeometry(5.6, 3.8);
+    const letterMesh = new THREE.Mesh(letterGeo, letterMat);
+    letterMesh.position.set(0, 0, -0.05); // Dentro del sobre
+    envelopeGroup.add(letterMesh);
+
+    // 5. Lógica de Interacción Perfeccionada
+    let isStarted = false;
+    let isOpened = false;
+    const audio = document.getElementById('bg-music');
+
+    // Botón Iniciar (UI)
+    document.getElementById('start-btn').addEventListener('click', () => {
+      isStarted = true;
+      audio.play().catch(e => console.log("Error de audio (CORS/Permissions)", e));
+      document.getElementById('ui-container').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('ui-container').style.display = 'none';
+        document.getElementById('instruction').style.opacity = '1';
+        controls.autoRotate = false; // Detener rotación automática al empezar
+      }, 1500);
+    });
+
+    // Raycaster para detectar clics precisos en el Sello de Cera
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    window.addEventListener('pointerdown', (event) => {
+      if (!isStarted || isOpened || event.target.tagName !== 'CANVAS') return;
+      
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      // Solo detectar colisión con el grupo del sello de cera
+      const intersects = raycaster.intersectObjects(waxSealGroup.children, true);
+      
+      if (intersects.length > 0) {
+        isOpened = true;
+        document.getElementById('instruction').style.opacity = '0'; 
+        
+        const tl = gsap.timeline();
+
+        // 1. Acercar cámara cinemáticamente
+        tl.to(camera.position, {
+          x: 0, y: 0.5, z: 8,
+          duration: 1.5,
+          ease: "power2.inOut"
+        });
+
+        // 2. Romper Sello/Abrir solapa (Rotar solapa hacia arriba)
+        tl.to(flapPivot.rotation, {
+          x: Math.PI * 0.95, // Casi 180 grados
+          duration: 2,
+          ease: "back.inOut(1.2)"
+        }, "-=0.5");
+
+        // 3. La carta sale hacia arriba y adelante
+        tl.to(letterMesh.position, {
+          y: 3.5,
+          z: 0.2,
+          duration: 2,
+          ease: "power2.out"
+        }, "-=1");
+
+        // 4. Mostrar el mensaje HTML (Pergamino)
+        setTimeout(() => {
+          const overlay = document.getElementById('letter-overlay');
+          overlay.style.pointerEvents = 'auto';
+          overlay.style.opacity = '1';
+        }, 3500);
+      }
+    });
+
+    // 6. Loop de Animación Profesional
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const time = clock.getElapsedTime();
+
+      // Flotación suave y sutil del sobre
+      if(!isOpened && isStarted) {
+        envelopeGroup.position.y = Math.sin(time * 0.7) * 0.15;
+        envelopeGroup.rotation.y = Math.sin(time * 0.4) * 0.05;
+      }
+
+      // Animación del entorno (Cosmos)
+      starsMesh.rotation.y = time * 0.01;
+      starsMesh.rotation.x = time * 0.005;
+      
+      // Rotación lenta de la nebulosa
+      nebulaGroup.children.forEach((mesh, i) => {
+        mesh.rotation.z += 0.0005 * (i % 2 === 0 ? 1 : -1);
+      });
+
+      // Brillo intermitente sutil del sello de cera (Bloom effect)
+      if(!isOpened){
+        const intensity = 0.2 + Math.abs(Math.sin(time * 2)) * 0.2;
+        frameMesh.material.emissiveIntensity = intensity;
+        sealText.material.opacity = 0.8 + Math.abs(Math.sin(time*2))*0.2;
+      }
+
+      controls.update();
+      composer.render(); // Usar composer para el Bloom
+    }
+    animate();
+
+    // Resize Handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
